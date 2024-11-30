@@ -1,8 +1,12 @@
 # Use the official PHP image from the Docker Hub
 FROM php:8.1-apache
 
-# Install SQLite3 and enable the extension
-RUN docker-php-ext-install pdo pdo_sqlite
+# Install the necessary packages for SQLite3 and other extensions
+RUN apt-get update && apt-get install -y \
+    libsqlite3-dev \
+    && docker-php-ext-install pdo pdo_sqlite \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /var/www/html
